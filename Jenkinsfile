@@ -6,10 +6,9 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_ENV = 'MySonarQubeServer'
-        SLACK_CHANNEL = '#jenkins-notifier'
-    }
-
+    SONARQUBE_ENV = 'sonarqube'
+    SLACK_CHANNEL = '#jenkins-notifier'
+}
     stages {
 
         stage('Build') {
