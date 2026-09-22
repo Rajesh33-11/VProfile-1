@@ -12,43 +12,44 @@ pipeline {
 
     stages {
 
-        stage('Git Clone') {
+        stage('Build') {
             steps {
-                echo 'Cloning source code from GitHub...'
-                git branch: 'main',
-                    url: 'https://github.com/Rajesh33-11/VProfile-1.git'
+                echo 'Building VProfile application...'
                 sh 'ls -la'
+                sh 'mvn clean verify'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 echo 'Running SonarQube static code analysis...'
-                withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh 'mvn clean verify sonar:sonar'
-                }
-            }
-        }
 
-        stage('Slack Notification') {
-            steps {
-                echo 'Sending build result to Slack...'
-                slackSend(
-                    channel: "${SLACK_CHANNEL}",
-                    color: 'good',
-                    message: "✅ Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
-                )
+                withSonarQubeEnv("${SONARQUBE_ENV}") {
+                    sh 'mvn sonar:sonar'
+                }
             }
         }
     }
 
     post {
+        success {
+            slackSend(
+                channel: "${SLACK_CHANNEL}",
+                color: 'good',
+                message: "✅ Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+            )
+        }
+
         failure {
             slackSend(
                 channel: "${SLACK_CHANNEL}",
                 color: 'danger',
                 message: "❌ Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
             )
+        }
+
+        always {
+            echo "Build completed with status: ${currentBuild.currentResult}"
         }
     }
 }
