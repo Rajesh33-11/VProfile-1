@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo 'Cloning source code from GitHub...'
                 git branch: 'main',
-                    url: 'https://github.com/betawins/VProfile-1.git'
+                    url: 'https://github.com/Rajesh33-11/VProfile-1.git'
                 sh 'ls -la'
             }
         }
