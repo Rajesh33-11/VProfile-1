@@ -69,7 +69,6 @@
 
 
         <!-- Hibernate -->
-OBOBOB
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
