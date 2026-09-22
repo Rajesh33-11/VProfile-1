@@ -26,7 +26,7 @@ pipeline {
                 echo 'Running SonarQube static code analysis...'
 
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh 'mvn sonar:sonar'
+                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:5.2.0.4988:sonar'
                 }
             }
         }
