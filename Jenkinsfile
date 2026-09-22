@@ -6,8 +6,8 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_ENV = 'MySonarQubeServer'
-        SLACK_CHANNEL = '#jenkins-alerts'
+        SONARQUBE_ENV = 'YOUR_ACTUAL_SONARQUBE_NAME'
+        SLACK_CHANNEL = '#jenkins-notifier'
     }
 
     stages {
@@ -15,7 +15,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building VProfile application...'
+
                 sh 'ls -la'
+
                 sh 'mvn clean verify'
             }
         }
@@ -32,19 +34,24 @@ pipeline {
     }
 
     post {
+
         success {
+            echo 'Build completed successfully.'
+
             slackSend(
                 channel: "${SLACK_CHANNEL}",
                 color: 'good',
-                message: "✅ Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+                message: "BUILD SUCCESS\nJob: ${env.JOB_NAME}\nBuild: #${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}"
             )
         }
 
         failure {
+            echo 'Build failed.'
+
             slackSend(
                 channel: "${SLACK_CHANNEL}",
                 color: 'danger',
-                message: "❌ Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+                message: "BUILD FAILED\nJob: ${env.JOB_NAME}\nBuild: #${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}"
             )
         }
 
@@ -53,5 +60,3 @@ pipeline {
         }
     }
 }
-
-
