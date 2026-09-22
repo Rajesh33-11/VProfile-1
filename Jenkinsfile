@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_ENV = 'YOUR_ACTUAL_SONARQUBE_NAME'
+        SONARQUBE_ENV = 'MySonarQubeServer'
         SLACK_CHANNEL = '#jenkins-notifier'
     }
 
